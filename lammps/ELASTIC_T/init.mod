@@ -9,6 +9,10 @@ variable up equal 2.0e-2
 # metal units, elastic constants in GPa
 ##### units		metal
 
+## metal to real conversion !
+## 1 bar ~ 1 atm
+## 1 eV  = 23.061 kcal/mol
+
 variable cfac equal 4.34e-6
 
 variable cunits string GPa
