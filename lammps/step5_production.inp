@@ -1,0 +1,43 @@
+variable        dcdfreq index 500
+
+
+units           real
+boundary        p p p
+
+newton          off
+pair_style      lj/charmmfsw/coul/long 10 12
+pair_modify     mix arithmetic
+kspace_style    pppm 1e-6
+
+atom_style      full
+bond_style      harmonic
+angle_style     charmm
+dihedral_style  charmmfsw
+special_bonds   charmm
+improper_style  harmonic
+timestep        1
+
+read_data       step3_input.data
+
+variable        laststep file sys_after_min.dump
+next            laststep
+read_dump       sys_after_min.dump ${laststep}  x y z vx vy vz ix iy iz box yes replace yes format native
+
+neighbor        2 bin
+neigh_modify    delay 5 every 1
+
+include         restraints/constraint_angletype
+fix             1 all shake 1e-6 500 0 m 1.008 a ${constraint_angletype}
+fix             2 all npt temp 303.15 303.15 100.0 iso   0.9869233 0.9869233 1000 couple  xyz mtk no pchain 0
+
+thermo          ${dcdfreq}
+thermo_style    custom step time xlo xhi ylo yhi zlo zhi etotal pe ke temp press ebond eangle edihed eimp evdwl ecoul elong temp vol cpuremain
+
+dump            1 all dcd ${dcdfreq} sys_after_npt.dcd
+dump_modify     1 unwrap yes
+
+
+
+reset_timestep  0
+run             50000
+write_data      sys_after_npt.data
