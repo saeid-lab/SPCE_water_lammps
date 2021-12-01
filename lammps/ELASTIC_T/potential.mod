@@ -12,14 +12,18 @@ neigh_modify once no every 1 delay 0 check yes
 
 fix avp all ave/time  ${nevery} ${nrepeat} ${nfreq} c_thermo_press mode vector
 thermo		${nthermo}
-thermo_style custom step temp pe press f_avp[1] f_avp[2] f_avp[3] f_avp[4] f_avp[5] f_avp[6]
+
+thermo_style custom step temp pe press f_avp[1] f_avp[2] f_avp[3] f_avp[4] f_avp[5] f_avp[6] lx ly lz xlo xhi ylo yhi zlo zhi xy xz yz 
 thermo_modify norm no
+
+
+
 
 # Setup MD
 
 timestep ${timestep}
-fix 4 all nve
-if "${thermostat} == 1" then &
-   "fix 5 all langevin ${temp} ${temp} ${tdamp} ${seed}"
+fix 4 all nvt temp 300.0 300.0 100
 
 kspace_style    pppm 1e-6
+
+

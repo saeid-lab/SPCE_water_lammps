@@ -4,7 +4,7 @@
 
 # Define the finite deformation size. Try several values of this
 # variable to verify that results do not depend on it.
-variable up equal 2.0e-2
+variable up equal 5.0e-2
  
 # metal units, elastic constants in GPa
 ##### units		metal
@@ -13,7 +13,7 @@ variable up equal 2.0e-2
 ## 1 bar ~ 1 atm
 ## 1 eV  = 23.061 kcal/mol
 
-variable cfac equal 4.34e-6
+variable cfac equal 1.0e-4
 
 variable cunits string GPa
 
@@ -22,13 +22,9 @@ variable nevery equal 20                  # sampling interval
 variable nrepeat equal 10                 # number of samples
 variable nfreq equal ${nevery}*${nrepeat} # length of one average
 variable nthermo equal ${nfreq}           # interval for thermo output
-variable nequil equal 10*${nthermo}       # length of equilibration run
-variable nrun equal 3*${nthermo}          # length of equilibrated run
-variable timestep equal 0.01	           # timestep
-variable adiabatic equal 0                # adiabatic (1) or isothermal (2)
-variable tdamp equal 0.01                 # time constant for thermostat
-variable temp equal 303.15                # temperature of initial sample
-variable seed equal 123457                # seed for thermostat
+variable nequil equal 20*${nthermo}       # length of equilibration run
+variable nrun equal 10*${nthermo}          # length of equilibrated run
+variable timestep equal 1.0	           # timestep
 
 
 
