@@ -1,0 +1,53 @@
+  atom_style   full
+  units        real
+  pair_style   lj/cut/coul/long 12.0 12.0
+  bond_style   harmonic
+  angle_style  harmonic
+  kspace_style pppm 0.0001
+
+  read_data spce_after_min.data
+
+  pair_coeff 1 1 0.1553 3.166
+  pair_coeff * 2 0.0 0.0
+
+  bond_coeff 1 600.0 1.0
+  angle_coeff 1 75.0 109.47
+  special_bonds   lj/coul 0.0 0.0 0.5
+
+  group spce type 1:2
+  velocity	all create 300 432567 dist uniform
+  
+  variable toteng equal etotal
+  variable ke equal ke
+  variable tpres equal press
+
+  fix     avepress all ave/time 1 1000 1000 v_tpres
+  fix     avetemp all ave/time 1 1000 1000 c_thermo_temp
+  fix     avepe   all ave/time 1 1000 1000 c_thermo_pe
+  fix     aveke   all ave/time 1 1000 1000 v_ke
+  fix     avetot  all ave/time 1 1000 1000 v_toteng
+
+
+  neighbor 2.0 bin
+  neigh_modify delay 1 every 1  check yes
+
+  
+  timestep 2.0
+  thermo   1000
+  thermo_style custom step temp press pe f_avetemp f_avepress vol f_avepe f_aveke f_avetot density cpuremain
+  
+  fix	fshake all shake 0.0001 20 0 b 1 a 1
+  fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
+
+  run   250000
+
+  unfix fshake
+  unfix fxnpt
+ 
+  fix	fshake all shake 0.0001 20 0 b 1 a 1
+  fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
+  run   250000
+  
+  write_data    SPCE_OPT.data
+
+
